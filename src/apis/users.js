@@ -31,11 +31,11 @@ export default {
     return apiHelper.get(`/users/top`)
   },
 
-  addFollowed({ userId }) {
+  addFollowing({ userId }) {
     return apiHelper.post(`/following/${userId}`, null)
   },
 
-  deleteFollowed({ userId }) {
+  deleteFollowing({ userId }) {
     return apiHelper.delete(`/following/${userId}`)
   }
 }

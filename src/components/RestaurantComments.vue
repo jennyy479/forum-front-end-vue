@@ -4,16 +4,14 @@
 
     <div v-for="comment in restaurantComments" :key="comment.id">
       <blockquote class="blockquote mb-0">
-        <button
-          v-if="currentUser.isAdmin"
-          type="button"
-          class="btn btn-danger float-right"
-          @click.stop.prevent="handleDeleteButtonClick(comment.id)"
-        >
+        <button v-if="currentUser.isAdmin" type="button" class="btn btn-danger float-right"
+          @click.stop.prevent="handleDeleteButtonClick(comment.id)">
           Delete
         </button>
         <h3>
-          <a href="#"> {{ comment.User.name }}</a>
+          <router-link :to="{ name: 'user', params: { id: comment.User.id }}">
+            {{ comment.User.name }}
+          </router-link>
         </h3>
         <p>{{ comment.text }}</p>
         <footer class="blockquote-footer">
@@ -29,14 +27,6 @@
 import { fromNowFilter } from "./../utils/mixins";
 import { mapState } from "vuex";
 
-const dummyUser = {
-  currentUser: {
-    id: 1,
-    name: "root",
-    email: "root@example.com",
-    isAdmin: true,
-  },
-};
 
 export default {
   mixins: [fromNowFilter],
@@ -47,12 +37,6 @@ export default {
     },
   },
 
-  
-  data() {
-    return {
-      currentUser: dummyUser.currentUser,
-    };
-  },
   
   computed: {
     ...mapState(['currentUser'])
@@ -82,4 +66,5 @@ h3 {
 .blockquote-footer {
   font-size: 12.5px;
 }
+
 </style>
