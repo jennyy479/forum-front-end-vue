@@ -72,7 +72,7 @@ const routes = [
   },
   {
     path: '/users/:id/edit',
-    name: 'user',
+    name: 'user-edit',
     component: () => import('../views/UserEdit.vue')
   },
   {
