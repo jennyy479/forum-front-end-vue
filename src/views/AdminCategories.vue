@@ -29,12 +29,14 @@
             <th scope="row">{{ category.id }}</th>
             <td class="position-relative">
               <input v-show="category.isEditing" v-model="category.name" type="text" class="form-control">
-              <div class="category-name" v-show="!category.isEditing">{{ category.name }} </div>
-              <span v-show="category.isEditing" class="cancel" @click="handleCancel(category.id)">✕</span>
+              <div class="category-name" v-show="!category.isEditing">{{ category.name }}
+              </div>
+                <span v-show="category.isEditing" class="cancel" @click="handleCancel(category.id)">✕</span>
+
             </td>
             <td class="d-flex justify-content-between">
               <button v-show="!category.isEditing" @click.stop.prevent="toggleIsEditing(category.id)"
-                @click="edit(category, indexCategory)" type="button" class="btn btn-link mr-2">Edit</button>
+                 type="button" class="btn btn-link mr-2">Edit</button>
               <button v-show="category.isEditing" type="button"
                 @click.stop.prevent="updateCategory({ categoryId: category.id, name: category.name })"
                 class="btn btn-link mr-2">Save</button>
@@ -199,3 +201,33 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.category-name {
+  padding: 0.375rem 0.75rem;
+  border: 1px solid transparent;
+  outline: 0;
+  cursor: auto;
+}
+
+.btn-link {
+  width: 62px;
+}
+
+.cancel {
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 25px;
+  height: 25px;
+  border: 1px solid #aaaaaa;
+  border-radius: 50%;
+  user-select: none;
+  cursor: pointer;
+  font-size: 12px;
+}
+</style>
