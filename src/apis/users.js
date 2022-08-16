@@ -5,6 +5,10 @@ export default {
     return apiHelper.get(`/get_current_user`)
   },
 
+  getAdminUsers() {
+    return apiHelper.get('/admin/users')
+  },
+
   get({ userId }) {
     return apiHelper.get(`/users/${userId}`)
   },

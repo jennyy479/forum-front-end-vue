@@ -110,12 +110,12 @@ const routes = [
     component: () => import('../views/AdminCategories.vue'),
     beforeEnter: authorizeIsAdmin
   },
-  // {
-  //   path: '/admin/users/',
-  //   name: 'admin-users',
-  //   component: () => import('./views/AdminUsers.vue'),
-  //   beforeEnter: authorizeIsAdmin
-  // },
+  {
+    path: '/admin/users/',
+    name: 'admin-users',
+    component: () => import('../views/AdminUsers.vue'),
+    beforeEnter: authorizeIsAdmin
+  },
   {
     path: '*',
     name: 'not-found',
