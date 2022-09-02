@@ -19,8 +19,11 @@ export default {
     return apiHelper.get('/restaurants/top')
   },
 
-  createComments() {
-    return apiHelper.post('/comments', null)
+  createComments({ restaurantId, text }) {
+    return apiHelper.post('/comments', {
+      restaurantId,
+      text
+    })
   },
 
   deleteComments({ commentId }) {

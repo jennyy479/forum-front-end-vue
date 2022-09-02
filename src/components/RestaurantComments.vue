@@ -24,8 +24,10 @@
 </template>
 
 <script>
+import restaurantsAPI from "./../apis/restaurants";
 import { fromNowFilter } from "./../utils/mixins";
 import { mapState } from "vuex";
+import { Toast } from './../utils/helpers'
 
 
 export default {
@@ -43,9 +45,20 @@ export default {
   },
 
   methods: {
-    handleDeleteButtonClick(commentId) {
-      console.log("handleDeleteButtonClick", commentId);
-      this.$emit("after-delete-comment", commentId);
+    async handleDeleteButtonClick(commentId) {
+      try {
+        const { data } = await restaurantsAPI.deleteComments({ commentId })
+        if (data.status === 'error') { throw new Error(data.message)}
+        
+        this.$emit("after-delete-comment", commentId);
+        Toast.fire({
+          icon: 'success',
+          title: '移除評論成功'
+        })
+      }
+      catch(error) {
+        console.error(error.message)
+      }
     },
   },
  
