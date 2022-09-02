@@ -5,13 +5,14 @@
         <div>
         <h1>{{ restaurant.name }}</h1>
         <span class="badge badge-secondary mt-1 mb-3">
-          {{ restaurant.Category ? restaurant.Category.name : "未分類" }}</span>
+          {{ restaurant.categoryName
+        }}</span>
     </div>
 
     <hr />
 
     <ul>
-      <li>評論數： {{ restaurant.Comments.length }}</li>
+      <li>評論數： {{ restaurant.commentsLength }}</li>
       <li>瀏覽次數： {{ restaurant.viewCounts }}</li>
     </ul>
 
@@ -29,51 +30,57 @@ import { Toast } from "../utils/helpers";
 
 
 export default {
+  name: 'RestaurantDashboard',
   components: {
     Spinner
   },
 
-  name: "RestaurantDashboard",
   data() {
     return {
       restaurant: {
         id: -1,
         name:'',
-        CategoryName: "",
+        categoryName: "",
         commentsLength: 0,
-        favoriteUsersLength: 0,
-        likedUsersLength: 0,
+        viewCounts: 0
       },
       isLoading: true
     };
   },
 
-  mounted() {
+  created() {
     const { id: restaurantId } = this.$route.params;
     this.fetchRestaurant(restaurantId);
+  },
+  beforeRouteUpdate(to, from, next) {
+    const { id: restaurantId } = to.params
+    this.fetchRestaurant(restaurantId)
+    next()
   },
 
   methods: {
     async fetchRestaurant(restaurantId) {
       try {
         this.isLoading = true
-        const { data: {restaurant} } = await restaurantsAPI.getRestaurant({restaurantId})
-        // if (data.status !== "success") {
-        //   throw new Error(data.message)
-        // }
+        const { data } = await restaurantsAPI.getRestaurant({restaurantId})
+        if (data.status === "error") {
+          throw new Error(data.message)
+        }
+        const { id, name, Category, Comments, viewCounts } = data.restaurant
         this.restaurant = {
           ...this.restaurant,
-          id: restaurant.id,
-          name: restaurant.name,
-          categoryName: restaurant.Category.name,
-          commentsLength: restaurant.Comments.length,
-          favoriteUsersLength: restaurant.FavoritedUswes.length,
-          likedUsersLength: restaurant.likedUsers.length
-          };
+          id,
+          name,
+          categoryName: Category ? Category.name: '未分類',
+          commentsLength: Comments.length,
+          viewCounts
+        };
+      
         console.log("restaurantId", restaurantId);
         this.isLoading = false
       }
       catch(error) {
+        console.error(error.message)
         this.isLoading = false
         Toast.fire({
           type: 'error',
@@ -84,3 +91,5 @@ export default {
   },
 };
 </script>
+
+
