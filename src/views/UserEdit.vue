@@ -62,32 +62,8 @@ export default {
   },
 
   methods: {
-    // async fetchUser(userId) {
-    //   try {
-    //     const { data } = await usersAPI.get({ userId })
-    //     const { profile } = data
-    //     const {
-    //       image, name
-    //     } = profile
-    //     console.log('data', data)
-    //     console.log('id', data.profile.id)
-    //     console.log('name', name)
-
-    //     this.user = {
-    //       ...this.user,
-    //       image,
-    //       name,
-    //     }
-
-    //   } catch (error) {
-    //     Toast.fire({
-    //       icon: 'error',
-    //       title: '無法取得使用者資料，請稍後再試'
-    //     })
-    //   }
-    // },
     async handleSubmit(e){
-      alert('hihihi')
+  
       try {
         if (!this.name) {
         Toast.fire({
@@ -134,7 +110,7 @@ export default {
       this.image = image
     },
 
-    handleFileChange(e) {
+    async handleFileChange(e) {
       console.log('e', e)
       const { files } = e.target;
       console.log("files", files);
@@ -143,44 +119,6 @@ export default {
         this.image = imageURL;
       }
     },
-
-    // async handleSubmit(e) {
-     
-    //   console.log('e:', e)
-    //  try {
-    //    if (!this.name) {
-    //      Toast.fire({
-    //        icon: 'warning',
-    //        title: '您尚未填寫姓名'
-    //      })
-    //      return
-    //    }
-    //    console.log('e:', e)
-    //    const form = e.target
-    //    const formData = new formData(form)
-
-    //    this.isProcessing = true
-
-    //    const { data } = await usersAPI.update({
-    //      userId: this.id,
-    //      formData
-    //    })
-    //    console.log('data',data)
-
-    //    if (data.status === 'error') {
-    //      throw new Error(data.message)
-    //    }
-    //    this.$router.push({ name: 'user', params: { id: this.id } })
-      
-    //  } catch(error) {
-    //    this.isProcessing = false
-    //    Toast.fire({
-    //      icon: 'error',
-    //      title: '無法更新使用者資料，請稍後再試'
-    //    })
-    //  }
-    
-    // }
   }
 
 </script>

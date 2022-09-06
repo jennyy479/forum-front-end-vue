@@ -27,14 +27,10 @@
           <td>{{ user.email }}</td>
           <td>{{ user.isAdmin ? "admin": "user" }}</td>
           <td>
-            <div v-if="!(currentUser.id === user.id)">
-              <button v-if="user.isAdmin" type="button" class="btn btn-link" @click.stop.prevent="setAsUser(user.id)">
-                set as user
-              </button>
-              <button v-else type="button" class="btn btn-link" @click.stop.prevent="setAsAdmin(user.id)">
-                set as admin
-              </button>
-            </div>
+            <button v-if="currentUser.id !== user.id" type="button" class="btn btn-link"
+              @click.stop.prevent="toggleUserRole({ userId: user.id, isAdmin: user.isAdmin })">
+              {{ user.isAdmin ? 'set as user' : 'set as admin' }}
+            </button>
           </td>
         </tr>
       </tbody>
@@ -43,10 +39,11 @@
 </template>
 
 <script>
-import usersAPI from "../apis/users";
+import adminAPI from "../apis/admin";
 import { Toast } from "../utils/helpers";
 import AdminNav from "../components/AdminNav.vue";
 import { mapState } from "vuex"
+
 
 export default {
   name: "AdminUser",
@@ -71,42 +68,55 @@ export default {
   },
 
   created() {
-    this.fetchAdminUsers();
+    this.fetchUsers();
   },
 
   methods: {
-  async fetchAdminUsers() {
+  async fetchUsers() {
     try
-      { const { data } = await usersAPI.getAdminUsers()
+      { const { data } = await adminAPI.users.get()
+
+      if (data.status === 'error') {
+        throw new Error(data.message)
+      }
       console.log(data)
       this.users = data.users
       } catch(error) {
         Toast.fire({
         icon: 'error',
-        title: '無法載入使用者，請稍後再試'
+        title: '無法載入會員資料，請稍後再試'
       })
       }
     },
 
-    toggleUserRole(userId) {
-      console.log(userId)
-      this.users = this.users.map( user => {
-        if (user.id !== userId) return user
-
-        return {
-          ...user,
-          isAdmin: !user.isAdmin
+    async toggleUserRole({userId, isAdmin }) {
+      try {
+        const { data } = await adminAPI.users.update({
+          userId,
+          isAdmin: (!isAdmin).toString()
+        })
+        if (data.status === 'error') {
+          throw new Error(data.message)
         }
-      })
+        console.log(userId)
+        this.users = this.users.map(user => {
+          if (user.id === userId) {
+            return {
+            ...user,
+            isAdmin: !isAdmin
+            }
+          }
+          return user
+        })
+      } catch(error) {
+        console.error(error.message)
+        Toast.fire({
+          icon: 'error',
+          title: '無法更新會員角色，請稍後再試'
+        })
+      }
+     
     },
-
-    setAsUser(userId) {
-      this.toggleUserRole(userId)
-    },
-
-    setAsAdmin(userId) {
-      this.toggleUserRole(userId)
-    }
   }
 };
 
