@@ -23,7 +23,7 @@ const routes = [
   {
     path: '/',
     name: 'root',
-    redirect: '/signin'
+    redirect: '/restaurant'
   },
   {
     path: '/signin',
